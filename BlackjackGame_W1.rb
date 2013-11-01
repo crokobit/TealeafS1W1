@@ -47,15 +47,17 @@ class Deck
 end
 
 class People
-  def initialize name
+  def initialize ( name , dealer_or_not )
     @name = name
     @cards = []
     @total_value = 0
-    @dealer = false
+    @dealer = dealer_or_not
   end
+
   def is_dealer
     @dealer = true
   end
+
   def status
     if @total_value > 21
       'busted'
@@ -65,11 +67,12 @@ class People
       'BlackJack'
     else
       puts 'ERROR!! HERE'
+    end
   end
 
   def get_card card
-    @cards.pop = card
-    #@total_value += card[:value]
+    @cards.push(card)
+    @total_value += card[:value]
   end
 
   def puts_cards
@@ -84,7 +87,7 @@ deck = Deck.new(3)
 deck.shuffle
 #deck1.puts_all_cards
 #puts deck1.pop_card
-people1 = People.new('Ivan')
+people1 = People.new('Ivan',false)
 people1.puts_cards
-people.get_card(deck.pop)
+people1.get_card(deck.pop)
 people1.puts_cards
