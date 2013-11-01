@@ -54,6 +54,11 @@ class People
     @dealer = dealer_or_not
   end
 
+  def restart
+    @cards = []
+    @total_value = 0
+  end
+
   def is_dealer
     @dealer = true
   end
@@ -70,7 +75,7 @@ class People
     end
   end
 
-  def get_card card
+  def push card
     @cards.push(card)
     @total_value += card[:value]
   end
@@ -81,13 +86,57 @@ class People
     puts"total value = #{@total_value}"
   end
 
+  def name
+    @name
+  end
+
 end
 
-deck = Deck.new(3)
-deck.shuffle
-#deck1.puts_all_cards
-#puts deck1.pop_card
-people1 = People.new('Ivan',false)
-people1.puts_cards
-people1.get_card(deck.pop)
-people1.puts_cards
+class Game
+  def initialize
+    puts "Game start"
+    puts "Set Player"
+    puts "Enter dealer's name"
+    name = gets.chomp
+    @dealer = People.new(name,true)
+    puts "Enter Player's name"
+    name = gets.chomp
+    @player = People.new(name,false)
+    @deck = Deck.new(4) #use 4 decks
+    @deck.shuffle
+  end
+
+  def start_game
+    2.times do
+      @dealer.push(@deck.pop)
+      @player.push(@deck.pop)
+    end
+  end
+
+  def restart_game
+    @dealer.restart
+    @player.restart
+  end
+
+  def status
+    puts"dealer status"
+    @dealer.puts_cards
+    puts"player status"
+    @player.puts_cards
+  end
+
+  def ask_hit_or_stay people
+    puts"#{People.name} do you want hit or stay"
+    flow = gets.chomp
+    if flow == hit
+      people.push(@deck.pop)
+      
+    end
+  end
+
+end
+
+game1 = Game.new
+game1.start_game
+game1.status
+
