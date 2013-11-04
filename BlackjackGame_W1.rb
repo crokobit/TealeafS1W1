@@ -46,6 +46,10 @@ class Deck
   def pop
     @deck.pop
   end
+
+  def push card
+    @deck.push(card)
+  end
 end
 
 class People
@@ -98,6 +102,13 @@ class People
     @total_value
   end
 
+  def clean_card
+    @cards = []
+  end
+
+  def clean_total_value
+    @total_value = 0
+  end
 end
 
 class Game
@@ -194,59 +205,57 @@ class Game
     end
   end
 
+  def end_deal_cards
+    @dealer.clean_card
+    @dealer.clean_total_value
+    @player.clean_card
+    @player.clean_total_value
+    @deck.shuffle
+  end
+
 end
 
-#dealer_proc = Proc.new {@dealer}
-#player_proc = Proc.new {@player}
-game = Game.new
-game.start_game
-game.status
-player_array = ['player','dealer']
 
-player_array.each do |who|
+  #dealer_proc = Proc.new {@dealer}
+  #player_proc = Proc.new {@player}
+  game = Game.new
+  player_array = ['player','dealer']
+  play_or_not = true
 
-  do_what = ''
 
-  while ( ( do_what != 'stay' ) && ( game.one_of_people_BJ_or_busted != true ) )
-    do_what = game.hit_or_stay(who)
+
+while play_or_not
+    game.start_game
     game.status
-  end
+    player_array.each do |who|
 
-  if ( ( who == 'dealer' ) && ( do_what == 'stay' ) )
-    game.end_game_compare
-  end
+      do_what = ''
 
-  if ( game.end_game == true && who == 'dealer' ) #dealer last
-    break
-  end
+      while ( ( do_what != 'stay' ) && ( game.one_of_people_BJ_or_busted != true ) )
+        do_what = game.hit_or_stay(who)
+        game.status
+      end
 
-end
+      if ( ( who == 'dealer' ) && ( do_what == 'stay' ) )
+        game.end_game_compare
+      end
 
+      if ( game.end_game == true && who == 'dealer' ) #dealer last
+        break
+      end
 
+    end
 
-=begin
-counter = 1
-while game.one_of_people_BJ_or_busted != true
-  if counter.odd?
-    game.hit_or_stay 'dealer'
+  game.end_deal_cards
+
+  puts "play game? yes or no"
+  temp = gets.chomp
+  if (temp == 'yes')
+    play_or_not = true
   else
-    game.hit_or_stay 'player'
+    play_or_not = false
   end
-    game.status
 
-    counter += 1
+
+
 end
-=end
-
-
-
-
-
-
-
-
-
-
-
-
-
