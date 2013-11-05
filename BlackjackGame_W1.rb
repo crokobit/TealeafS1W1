@@ -171,6 +171,10 @@ class Game
       puts"#{block.name} #{who} hit a card"
 #      binding.pry
       block.push(@deck.pop)
+    elsif flow == 'stay' && who == 'dealer' && @dealer.total_value < 17
+      puts"#{block.name} #{who} , your total value < 17, you must hit a card" 
+      flow = 'hit'
+      block.push(@deck.pop)      
     elsif flow == 'stay'
       puts"#{block.name} #{who} stay"
     else
