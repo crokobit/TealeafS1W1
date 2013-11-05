@@ -84,6 +84,13 @@ class People
   def push card
     @cards.push(card)
     @total_value += card[:value]
+    total_value_consider_A
+  end
+
+  def total_value_consider_A
+    @cards.select { |card| card[:show_value] == 'A' }.count.times do
+      @total_value +=10 if ( @total_value + 10 ) <= 21
+    end
   end
 
   def puts_cards
